@@ -1,11 +1,10 @@
 import { expect } from "chai";
 import {HardhatLocalNetwork as hdhn} from "../../Class/Chains";
 import { Contract, ethers,Signer, utils } from "ethers";
-import { before } from "mocha";
-import { hexZeroPad } from "ethers/lib/utils";
+//import { before } from "mocha";
 
 const compiledFactory:any = require("@uniswap/v2-core/build/UniswapV2Factory.json");
-const compiledERC20:any = require("../../Ethereum/Ethereum/sources/ERC20.sol/Token.json");
+const compiledERC20:any = require("../../Ethereum/Ethereum/sources/ERC20.sol/DevToken.json");
 
 const numberOfP:number = 3; // integer between 1 and 20 Going higher than 7 might require to raise timeout
 

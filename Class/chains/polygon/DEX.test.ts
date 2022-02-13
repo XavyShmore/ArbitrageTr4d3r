@@ -10,7 +10,7 @@ var expect = chai.expect;
 import { Chain, Dex, DEXData, DEXTYPE } from "../../primitives";
 
 describe("Polygon DEX tests",function(){
-    this.timeout(8000);
+    this.timeout(16000);
     describe("SushiSwapv2",async function(){
 
         var erc20_0:Contract;
@@ -24,56 +24,62 @@ describe("Polygon DEX tests",function(){
 
         var signerAddress:string;
 
-        
-
-        before(async ()=>{
+        before("Set Signer address",async () => {
             //get signer address
             signerAddress = await hdhn.signer.getAddress();
-
+        });
+        before("Deploy 2 erc20",async () => {
             //deploy 2 erc20
-            const compiledERC20 = require("../../../Ethereum/Ethereum/sources/ERC20.sol/Token.json");
+            const compiledERC20 = require("../../../Ethereum/Ethereum/sources/ERC20.sol/DevToken.json");
             var erc20Factory = new ethers.ContractFactory(compiledERC20.abi,compiledERC20.bytecode,hdhn.signer);
 
             erc20_0 = await erc20Factory.deploy("1000000", "Token 0", "5", "T0");
             erc20_1 = await erc20Factory.deploy("1000000", "Token 1", "5", "T1");
-
+        });
+        before("Deploy Uniswap",async () => {
             //deploy uniswap factory
             const compiledUniswapFactory:any = require("@uniswap/v2-core/build/UniswapV2Factory.json");
             uniswapFactory = await new ethers.ContractFactory(compiledUniswapFactory.interface,compiledUniswapFactory.bytecode,hdhn.signer).deploy(signerAddress);
-            
+
             //deploy uniswap router
             const compiledUniswapRouter = require("@uniswap/v2-periphery/build/UniswapV2Router02");
             router = await new ethers.ContractFactory(compiledUniswapRouter.abi,compiledUniswapRouter.bytecode,hdhn.signer).deploy(uniswapFactory.address,signerAddress);
+        });
+
+        before("Set up dex",async ()=>{
+            return new Promise(async(resolve,reject)=>{
+                try{
+                    //deploy pair
+                    var tx = await uniswapFactory.createPair(erc20_0.address,erc20_1.address);
+                    await tx.wait();
+    
+                    //get pair address
+                    var pairAddress:string = await uniswapFactory.allPairs(0);
+                    const compiledUniswapPair:any = require("@uniswap/v2-core/build/UniswapV2Pair.json");
+                    pair = new Contract(pairAddress,compiledUniswapPair.abi,hdhn.signer);
+                    var t0 = await pair.token0();
+                    var t1 = await pair.token1();
+    
+                    //Setup Dex
+                    var data:DEXData = {
+                        address:pairAddress,
+                        token0:t0,
+                        token1:t1,
+                        type:DEXTYPE.SushiV2,
+                        token0Amount:1,
+                        token1Amount:1,
+                        chain:Chain.hardhat
+                    }
+                    t0t1Dex = new SushiV2(data,hdhn.signer);
+                    resolve();
+                }catch(err){
+                    reject (err);
+                }
+            });
             
-            //deploy pair
-            var tx = await uniswapFactory.createPair(erc20_0.address,erc20_1.address);
-            console.log
-            ("ok0");
-            await tx.wait();
-            console.log("ok1");
-
-            //get pair address
-            var pairAddress:string = await uniswapFactory.allPairs(0);
-            const compiledUniswapPair:any = require("@uniswap/v2-core/build/UniswapV2Pair.json");
-            pair = new Contract(pairAddress,compiledUniswapPair.abi,hdhn.signer);
-            var t0 = await pair.token0();
-            var t1 = await pair.token1();
-
-            //Setup Dex
-            var data:DEXData = {
-                address:pairAddress,
-                token0:t0,
-                token1:t1,
-                type:DEXTYPE.SushiV2,
-                token0Amount:1,
-                token1Amount:1,
-                chain:Chain.hardhat
-            }
-            t0t1Dex = new SushiV2(data,hdhn.signer);
         });
 
         it("Deployed correctly erc20 tokens and gave 1000000 balance",async function(){
-
             return new Promise(async (resolve, reject) => {
                 try{
 

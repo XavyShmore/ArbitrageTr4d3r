@@ -11,7 +11,7 @@ chai_1.default.use(require('chai-bn')(ethers_1.ethers.BigNumber));
 var expect = chai_1.default.expect;
 const primitives_1 = require("../../primitives");
 describe("Polygon DEX tests", function () {
-    this.timeout(8000);
+    this.timeout(16000);
     describe("SushiSwapv2", async function () {
         var erc20_0;
         var erc20_1;
@@ -20,42 +20,54 @@ describe("Polygon DEX tests", function () {
         var router;
         var t0t1Dex;
         var signerAddress;
-        before(async () => {
+        before("Set Signer address", async () => {
             //get signer address
             signerAddress = await Chains_1.HardhatLocalNetwork.signer.getAddress();
+        });
+        before("Deploy 2 erc20", async () => {
             //deploy 2 erc20
-            const compiledERC20 = require("../../../Ethereum/Ethereum/sources/ERC20.sol/Token.json");
+            const compiledERC20 = require("../../../Ethereum/Ethereum/sources/ERC20.sol/DevToken.json");
             var erc20Factory = new ethers_1.ethers.ContractFactory(compiledERC20.abi, compiledERC20.bytecode, Chains_1.HardhatLocalNetwork.signer);
             erc20_0 = await erc20Factory.deploy("1000000", "Token 0", "5", "T0");
             erc20_1 = await erc20Factory.deploy("1000000", "Token 1", "5", "T1");
+        });
+        before("Deploy Uniswap", async () => {
             //deploy uniswap factory
             const compiledUniswapFactory = require("@uniswap/v2-core/build/UniswapV2Factory.json");
             uniswapFactory = await new ethers_1.ethers.ContractFactory(compiledUniswapFactory.interface, compiledUniswapFactory.bytecode, Chains_1.HardhatLocalNetwork.signer).deploy(signerAddress);
             //deploy uniswap router
             const compiledUniswapRouter = require("@uniswap/v2-periphery/build/UniswapV2Router02");
             router = await new ethers_1.ethers.ContractFactory(compiledUniswapRouter.abi, compiledUniswapRouter.bytecode, Chains_1.HardhatLocalNetwork.signer).deploy(uniswapFactory.address, signerAddress);
-            //deploy pair
-            var tx = await uniswapFactory.createPair(erc20_0.address, erc20_1.address);
-            console.log("ok0");
-            await tx.wait();
-            console.log("ok1");
-            //get pair address
-            var pairAddress = await uniswapFactory.allPairs(0);
-            const compiledUniswapPair = require("@uniswap/v2-core/build/UniswapV2Pair.json");
-            pair = new ethers_1.Contract(pairAddress, compiledUniswapPair.abi, Chains_1.HardhatLocalNetwork.signer);
-            var t0 = await pair.token0();
-            var t1 = await pair.token1();
-            //Setup Dex
-            var data = {
-                address: pairAddress,
-                token0: t0,
-                token1: t1,
-                type: primitives_1.DEXTYPE.SushiV2,
-                token0Amount: 1,
-                token1Amount: 1,
-                chain: primitives_1.Chain.hardhat
-            };
-            t0t1Dex = new DEX_1.SushiV2(data, Chains_1.HardhatLocalNetwork.signer);
+        });
+        before("Set up dex", async () => {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    //deploy pair
+                    var tx = await uniswapFactory.createPair(erc20_0.address, erc20_1.address);
+                    await tx.wait();
+                    //get pair address
+                    var pairAddress = await uniswapFactory.allPairs(0);
+                    const compiledUniswapPair = require("@uniswap/v2-core/build/UniswapV2Pair.json");
+                    pair = new ethers_1.Contract(pairAddress, compiledUniswapPair.abi, Chains_1.HardhatLocalNetwork.signer);
+                    var t0 = await pair.token0();
+                    var t1 = await pair.token1();
+                    //Setup Dex
+                    var data = {
+                        address: pairAddress,
+                        token0: t0,
+                        token1: t1,
+                        type: primitives_1.DEXTYPE.SushiV2,
+                        token0Amount: 1,
+                        token1Amount: 1,
+                        chain: primitives_1.Chain.hardhat
+                    };
+                    t0t1Dex = new DEX_1.SushiV2(data, Chains_1.HardhatLocalNetwork.signer);
+                    resolve();
+                }
+                catch (err) {
+                    reject(err);
+                }
+            });
         });
         it("Deployed correctly erc20 tokens and gave 1000000 balance", async function () {
             return new Promise(async (resolve, reject) => {

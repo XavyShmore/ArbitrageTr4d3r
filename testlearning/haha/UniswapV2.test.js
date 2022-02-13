@@ -3,15 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chai_1 = require("chai");
 const Chains_1 = require("../../Class/Chains");
 const ethers_1 = require("ethers");
-const mocha_1 = require("mocha");
+//import { before } from "mocha";
 const compiledFactory = require("@uniswap/v2-core/build/UniswapV2Factory.json");
-const compiledERC20 = require("../../Ethereum/Ethereum/sources/ERC20.sol/Token.json");
+const compiledERC20 = require("../../Ethereum/Ethereum/sources/ERC20.sol/DevToken.json");
 const numberOfP = 3; // integer between 1 and 20 Going higher than 7 might require to raise timeout
 let UniV2Factory;
 let accounts = [];
 let tokens = [];
 let accountAddresses;
-(0, mocha_1.before)(async () => {
+before(async () => {
     for (let i = 0; i < numberOfP; i++) {
         accounts.push(Chains_1.HardhatLocalNetwork.provider.getSigner(i));
     }
