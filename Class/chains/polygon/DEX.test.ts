@@ -8,6 +8,7 @@ chai.use(require('chai-bn')(ethers.BigNumber));
 var expect = chai.expect;
 
 import { Chain, Dex, DEXData, DEXTYPE } from "../../primitives";
+import testUtils from "../../../utils/testUtils";
 
 describe("Polygon DEX tests",function(){
     this.timeout(16000);
@@ -30,20 +31,13 @@ describe("Polygon DEX tests",function(){
         });
         before("Deploy 2 erc20",async () => {
             //deploy 2 erc20
-            const compiledERC20 = require("../../../Ethereum/Ethereum/sources/ERC20.sol/DevToken.json");
-            var erc20Factory = new ethers.ContractFactory(compiledERC20.abi,compiledERC20.bytecode,hdhn.signer);
-
-            erc20_0 = await erc20Factory.deploy("1000000", "Token 0", "5", "T0");
-            erc20_1 = await erc20Factory.deploy("1000000", "Token 1", "5", "T1");
+            [erc20_0,erc20_1] = await testUtils.erc20.generateTestToken(2,1000000,5);
         });
         before("Deploy Uniswap",async () => {
-            //deploy uniswap factory
-            const compiledUniswapFactory:any = require("@uniswap/v2-core/build/UniswapV2Factory.json");
-            uniswapFactory = await new ethers.ContractFactory(compiledUniswapFactory.interface,compiledUniswapFactory.bytecode,hdhn.signer).deploy(signerAddress);
-
-            //deploy uniswap router
-            const compiledUniswapRouter = require("@uniswap/v2-periphery/build/UniswapV2Router02");
-            router = await new ethers.ContractFactory(compiledUniswapRouter.abi,compiledUniswapRouter.bytecode,hdhn.signer).deploy(uniswapFactory.address,signerAddress);
+            //deploy uniswap factory and router
+            let response = await testUtils.uniswapV2Like.setUp()
+            uniswapFactory = response.factory;
+            router = response.router;
         });
 
         before("Set up dex",async ()=>{
@@ -75,40 +69,15 @@ describe("Polygon DEX tests",function(){
                 }catch(err){
                     reject (err);
                 }
-            });
-            
+            });  
         });
 
-        it("Deployed correctly erc20 tokens and gave 1000000 balance",async function(){
-            return new Promise(async (resolve, reject) => {
-                try{
-
-                    await Promise.all([verify(erc20_0),verify(erc20_1)]);
-                    resolve();
-                    async function verify(contract:Contract){
-                        expect((await contract.balanceOf(signerAddress)).eq(1000000)).is.true;
-                    }
-
-                } catch(err){
-                    reject(err);
-                }
-            });
-        });
-
-        it("Deployed Uniswap v2 factory",async () => {
-            await uniswapFactory.deployTransaction.wait();
-            expect(await uniswapFactory.deployed(),"Failed to deploy uniswapFactory").is.ok;
-        });
-        it("Deployed uniswap router",async ()=>{
-            await router.deployTransaction.wait();
-            expect(await router.deployed(),"Failed to deploy uniswap router").to.be.ok;
-        });
         it("Deployed a pair contract", async ()=>{
             expect(await pair.deployed()).to.be.ok;
         });
         it("Intantiated t0t1Dex",()=>{
             expect(t0t1Dex).to.be.ok;
-        })
+        });
 
         describe("update()",function(){
             //  call update and assert it returns the right values
