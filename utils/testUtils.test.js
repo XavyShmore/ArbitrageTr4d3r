@@ -16,11 +16,15 @@ describe("testUtils", () => {
         });
     });
     describe("UniswapV2Like", function () {
-        this.timeout(8000);
+        this.timeout(30000);
         it("setUp", async () => {
             let response = await testUtils_1.default.uniswapV2Like.setUp();
             (0, chai_1.expect)(response.factory.functions, "factory isn't deployed properly").ok;
             (0, chai_1.expect)(response.router.functions, "router isn't deployed properly").ok;
+        });
+        it("generatePairs", async () => {
+            let response = await testUtils_1.default.uniswapV2Like.generatePairs(5);
+            (0, chai_1.expect)(response.length == 5, "Something does'nt work").ok;
         });
     });
     describe("Erc20", function () {
