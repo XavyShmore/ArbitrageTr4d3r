@@ -4,7 +4,7 @@
   "description": "Bot to make money",
   "main": "index.js",
   "scripts": {
-    "test": "mocha '!(node_modules)/**/*.test.js' --parallel"
+    "test": "mocha '!(node_modules)/**/*.test.js' --parallel --timeout 30000"
   },
   "author": "Xavier Hamel",
   "license": "ISC",
