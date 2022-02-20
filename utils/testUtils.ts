@@ -1,6 +1,5 @@
 import { TransactionReceipt, TransactionResponse } from "@ethersproject/abstract-provider";
 import { Contract, ethers, Signer, Transaction } from "ethers";
-import { Deferrable } from "ethers/lib/utils";
 import {HardhatLocalNetwork as hdhn} from "../Class/Chains";
 import { Chain, DEXData, DEXTYPE } from "../Class/primitives";
 
