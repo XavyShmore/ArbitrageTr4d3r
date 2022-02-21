@@ -1,4 +1,4 @@
-import {Chain, DEXData,DEXTYPE,Dex } from "./primitives";
+import {Chain, DEXData,DEXTYPE,Dex } from "../primitives";
 import { Contract, ethers } from "ethers";
 
 const uniswapV2InterFace = require("@uniswap/v2-core/build/IUniswapV2Pair");

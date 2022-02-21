@@ -1,5 +1,5 @@
-import { SushiV2 } from "./DEX";
-import {HardhatLocalNetwork as hdhn} from "../../Chains";
+import { uniswapV2Like } from "./mainDex";
+import {HardhatLocalNetwork as hdhn} from "../Chains";
 
 import { Contract, ethers } from "ethers";
 
@@ -7,12 +7,12 @@ import chai from "chai";
 chai.use(require('chai-bn')(ethers.BigNumber));
 var expect = chai.expect;
 
-import { Chain, Dex, DEXData, DEXTYPE } from "../../primitives";
-import testUtils from "../../../utils/testUtils";
+import { Chain, Dex, DEXData, DEXTYPE } from "../primitives";
+import testUtils from "../../utils/testUtils";
 
-describe("Polygon DEX tests",function(){
+describe(" DEX tests",function(){
     this.timeout(16000);
-    describe("SushiSwapv2",async function(){
+    describe("UniswapV2Like",async function(){
 
         var erc20_0:Contract;
         var erc20_1:Contract;
@@ -64,7 +64,7 @@ describe("Polygon DEX tests",function(){
                         token1Amount:1,
                         chain:Chain.hardhat
                     }
-                    t0t1Dex = new SushiV2(data,hdhn.signer);
+                    t0t1Dex = new uniswapV2Like(data,hdhn.signer);
                     resolve();
                 }catch(err){
                     reject (err);

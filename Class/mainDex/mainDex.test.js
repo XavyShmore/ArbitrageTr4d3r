@@ -3,17 +3,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const DEX_1 = require("./DEX");
-const Chains_1 = require("../../Chains");
+const mainDex_1 = require("./mainDex");
+const Chains_1 = require("../Chains");
 const ethers_1 = require("ethers");
 const chai_1 = __importDefault(require("chai"));
 chai_1.default.use(require('chai-bn')(ethers_1.ethers.BigNumber));
 var expect = chai_1.default.expect;
-const primitives_1 = require("../../primitives");
-const testUtils_1 = __importDefault(require("../../../utils/testUtils"));
-describe("Polygon DEX tests", function () {
+const primitives_1 = require("../primitives");
+const testUtils_1 = __importDefault(require("../../utils/testUtils"));
+describe(" DEX tests", function () {
     this.timeout(16000);
-    describe("SushiSwapv2", async function () {
+    describe("UniswapV2Like", async function () {
         var erc20_0;
         var erc20_1;
         var uniswapFactory;
@@ -57,7 +57,7 @@ describe("Polygon DEX tests", function () {
                         token1Amount: 1,
                         chain: primitives_1.Chain.hardhat
                     };
-                    t0t1Dex = new DEX_1.SushiV2(data, Chains_1.HardhatLocalNetwork.signer);
+                    t0t1Dex = new mainDex_1.uniswapV2Like(data, Chains_1.HardhatLocalNetwork.signer);
                     resolve();
                 }
                 catch (err) {

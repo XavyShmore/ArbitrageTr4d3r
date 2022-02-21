@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.uniswapV2Like = void 0;
-const primitives_1 = require("./primitives");
+const primitives_1 = require("../primitives");
 const ethers_1 = require("ethers");
 const uniswapV2InterFace = require("@uniswap/v2-core/build/IUniswapV2Pair");
 class uniswapV2Like extends primitives_1.Dex {
