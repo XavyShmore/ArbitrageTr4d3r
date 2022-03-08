@@ -118,21 +118,12 @@ export abstract class Dex implements DEXData{
     _lastT0InstantPrice:ethers.BigNumber = ethers.BigNumber.from(0);
     
     getPriceUpdate():priceUpdate{
-        let generatePriceUpdate = (hasChangedSinceLastUpdate:boolean)=>{
-            return {
-                dexAddress:this.address,
-                token0Address:this.token0,
-                token1Address:this.token1,
-                t1InstantPrice:this.t1InstantPrice(),
-                t0InstantPrice:this.t0InstantPrice(),
-                hasChangedSinceLastUpdate:hasChangedSinceLastUpdate
-            }
-        }
-
-        if(this._lastT0InstantPrice==this.t0InstantPrice()){
-            return generatePriceUpdate(false);
-        }else{
-            return generatePriceUpdate(true);
+        return {
+            dexAddress:this.address,
+            token0Address:this.token0,
+            token1Address:this.token1,
+            t1InstantPrice:this.t1InstantPrice(),
+            t0InstantPrice:this.t0InstantPrice()
         }
     }
 }
@@ -235,6 +226,5 @@ export interface priceUpdate{
     token0Address:string,
     token1Address:string,
     t1InstantPrice:ethers.BigNumber,
-    t0InstantPrice:ethers.BigNumber,
-    hasChangedSinceLastUpdate:boolean
+    t0InstantPrice:ethers.BigNumber
 }

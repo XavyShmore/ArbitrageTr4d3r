@@ -1,10 +1,7 @@
 pragma solidity =0.7.3;
 
-//https://eips.ethereum.org/EIPS/eip-20
-// SPDX-License-Identifier: MIT
-pragma solidity >=0.5.0 <0.8.0;
 
-interface IToken {
+interface IDevToken {
 
     /// @param _owner The address from which the balance will be retrieved
     /// @return balance the balance
@@ -34,11 +31,17 @@ interface IToken {
     /// @return remaining Amount of remaining tokens allowed to spent
     function allowance(address _owner, address _spender) external view returns (uint256 remaining);
 
+    /// @param _recipient The addrees that receive the minted tokens
+    /// @param _value The amount ouf token minted
+    /// @return success Wether the operation have been successful.
+    function mint(address _recipient, uint256 _value) external returns (bool success);
+
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+    event Mint(address indexed _recipient, uint256 _value);
 }
 
-contract Token is IToken {
+contract DevToken is IDevToken {
     uint256 constant private MAX_UINT256 = 2**256 - 1;
     mapping (address => uint256) public balances;
     mapping (address => mapping (address => uint256)) public allowed;
@@ -93,5 +96,10 @@ contract Token is IToken {
 
     function allowance(address _owner, address _spender) public override view returns (uint256 remaining) {
         return allowed[_owner][_spender];
+    }
+    function mint(address _recipient, uint256 _value) public override returns(bool success){
+        balances[_recipient] += _value;
+        emit Mint(_recipient,_value);
+        return true;
     }
 }

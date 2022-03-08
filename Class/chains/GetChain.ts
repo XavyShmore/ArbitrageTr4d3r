@@ -1,24 +1,44 @@
-import { Chain, ChainHub } from "../primitives";
+import { Chain as c, ChainHub,DEXTYPE as d,DEXData, Dex, ChainClass, DEXTYPE } from "../primitives";
+import { Signer } from "ethers";
+import { HardhatLocalNetwork as hdhn,polygon } from "../Chains";
+import { uniswapV2Like } from "../mainDex/mainDex";
 
-import mainnetChainHub from "./mainnet/ChainHub";
-import polygonChainHub from "./polygon/ChainHub";
 
-export default function getChain (chain:Chain):ChainHub {
+function returnSpawnDexWithFilterAndChainClass(supportedDex:d[],chainClass:ChainClass){
+    function spawnDex(data:DEXData,signer:Signer):Dex{
+        if(!(supportedDex.includes(data.type))){
+            throw new Error("This dex is not supported on this chain");
+        }
+        switch (data.type){
+            case d.SushiV2:{
+                return new uniswapV2Like(data,signer);
+            }case d.UniswapV2:{
+                return new uniswapV2Like(data,signer);
+            }
+            default:{
+                throw"Dex not implemented";
+            }
+        }
+    }
+    return {spawnDex,chainClass};
+}
+
+export default function getChain (chain:c):ChainHub {
     switch(chain){
-        case Chain.mainnet:{
-            return mainnetChainHub;
-        }case Chain.ropsten:{
+        case c.mainnet:{
             throw "chain not implemented";
-        }case Chain.goerli:{
+        }case c.ropsten:{
             throw "chain not implemented";
-        }case Chain.rinkeby:{
+        }case c.goerli:{
             throw "chain not implemented";
-        }case Chain.polygon:{
-            return polygonChainHub;
-        }case Chain.polygonTest:{
+        }case c.rinkeby:{
             throw "chain not implemented";
-        }case Chain.hardhat:{
+        }case c.polygon:{
+            return returnSpawnDexWithFilterAndChainClass([d.SushiV2],polygon);
+        }case c.polygonTest:{
             throw "chain not implemented";
+        }case c.hardhat:{
+            return returnSpawnDexWithFilterAndChainClass([d.SushiV2,d.UniswapV2],hdhn);
         }
     }
 }
