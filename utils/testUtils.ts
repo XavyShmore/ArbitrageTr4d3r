@@ -1,4 +1,4 @@
-import { TransactionReceipt, TransactionResponse } from "@ethersproject/abstract-provider";
+import { TransactionResponse } from "@ethersproject/abstract-provider";
 import { Contract, ethers, Signer, Transaction } from "ethers";
 import {HardhatLocalNetwork as hdhn} from "../Class/Chains";
 import { Chain, DEXData, DEXTYPE } from "../Class/primitives";
@@ -6,7 +6,7 @@ import { Chain, DEXData, DEXTYPE } from "../Class/primitives";
 // returns an array with 20 ethers signer for the local test blockchain
 export async function generateAccounts(){ 
     let accountsSigner = [];
-    let accountDict:{[addresses:string]:Signer};
+    let accountDict:{[addresses:string]:Signer} = {};
     for(let i = 0; i<20; i++){
         accountsSigner.push(hdhn.provider.getSigner(i))
     }
@@ -23,6 +23,8 @@ export async function setUpUniswapV2(){
     let uniswapFactory:Contract = await new ethers.ContractFactory(compiledFactory.interface,compiledFactory.bytecode, hdhn.signer).deploy(signerAddress);
     const compiledUniswapRouter = require("@uniswap/v2-periphery/build/UniswapV2Router02");
     let router:Contract = await new ethers.ContractFactory(compiledUniswapRouter.abi,compiledUniswapRouter.bytecode,hdhn.signer).deploy(uniswapFactory.address,signerAddress);
+
+    //console.log(`Uniswap Factory adddress: ${uniswapFactory.address}, router address: ${router.address}`);
 
     return {factory: await uniswapFactory.deployed(),router:await router.deployed()};
 }
@@ -69,8 +71,6 @@ async function generatePairs(numOfPair:number, uniswapContracts?:{factory:Contra
             }
         });
     }
-
-    console.log(`Will generate ${Math.ceil((1+((1+8*numOfPair)**(0.5)))/2)} tokens`);
     return _generatePairs(
         numOfPair,
         typeof uniswapContracts !== 'undefined'?

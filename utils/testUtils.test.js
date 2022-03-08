@@ -23,8 +23,9 @@ describe("testUtils", () => {
             (0, chai_1.expect)(response.router.functions, "router isn't deployed properly").ok;
         });
         it("generatePairs", async () => {
-            let response = await testUtils_1.default.uniswapV2Like.generatePairs(5);
-            (0, chai_1.expect)(response.length == 5, "Something does'nt work").ok;
+            let wantedNumberOfParis = 5;
+            let response = await testUtils_1.default.uniswapV2Like.generatePairs(wantedNumberOfParis);
+            (0, chai_1.expect)(response.length == wantedNumberOfParis, "Something does'nt work").ok;
         });
     });
     describe("Erc20", function () {

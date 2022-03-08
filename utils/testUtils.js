@@ -7,7 +7,7 @@ const primitives_1 = require("../Class/primitives");
 // returns an array with 20 ethers signer for the local test blockchain
 async function generateAccounts() {
     let accountsSigner = [];
-    let accountDict;
+    let accountDict = {};
     for (let i = 0; i < 20; i++) {
         accountsSigner.push(Chains_1.HardhatLocalNetwork.provider.getSigner(i));
     }
@@ -25,6 +25,7 @@ async function setUpUniswapV2() {
     let uniswapFactory = await new ethers_1.ethers.ContractFactory(compiledFactory.interface, compiledFactory.bytecode, Chains_1.HardhatLocalNetwork.signer).deploy(signerAddress);
     const compiledUniswapRouter = require("@uniswap/v2-periphery/build/UniswapV2Router02");
     let router = await new ethers_1.ethers.ContractFactory(compiledUniswapRouter.abi, compiledUniswapRouter.bytecode, Chains_1.HardhatLocalNetwork.signer).deploy(uniswapFactory.address, signerAddress);
+    //console.log(`Uniswap Factory adddress: ${uniswapFactory.address}, router address: ${router.address}`);
     return { factory: await uniswapFactory.deployed(), router: await router.deployed() };
 }
 exports.setUpUniswapV2 = setUpUniswapV2;
@@ -67,7 +68,6 @@ async function generatePairs(numOfPair, uniswapContracts, tokens) {
             }
         });
     }
-    console.log(`Will generate ${Math.ceil((1 + ((1 + 8 * numOfPair) ** (0.5))) / 2)} tokens`);
     return _generatePairs(numOfPair, typeof uniswapContracts !== 'undefined' ?
         uniswapContracts :
         await setUpUniswapV2(), typeof tokens !== 'undefined' ?
