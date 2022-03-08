@@ -56,13 +56,13 @@ class uniswapV2Like extends primitives_1.Dex {
             _update();
         });
     }*/
-    //(token0Amount/token1Amount)/0.97
+    //(token0Amount/token1Amount)/0.97 * 2 ^ 112
     t1InstantPrice() {
-        return ethers_1.ethers.BigNumber.from(this.token0Amount).div(this.token1Amount).mul(100).div(97);
+        return ethers_1.ethers.BigNumber.from(this.token0Amount).mul(2n ** 112n).div(this.token1Amount).mul(100).div(97);
     }
-    //(token1Amount/token0Amount)/0.97
+    //(token1Amount/token0Amount)/0.97 * 2 ^ 112
     t0InstantPrice() {
-        return ethers_1.ethers.BigNumber.from(this.token1Amount).div(this.token0Amount).mul(100).div(97);
+        return ethers_1.ethers.BigNumber.from(this.token1Amount).mul(2n ** 112n).div(this.token0Amount).mul(100).div(97);
     }
 }
 exports.uniswapV2Like = uniswapV2Like;

@@ -5,7 +5,7 @@ const Chains_1 = require("../Chains");
 const mainDex_1 = require("../mainDex/mainDex");
 function returnSpawnDexWithFilterAndChainClass(supportedDex, chainClass) {
     function spawnDex(data, signer) {
-        if (!(data.type in supportedDex)) {
+        if (!(supportedDex.includes(data.type))) {
             throw new Error("This dex is not supported on this chain");
         }
         switch (data.type) {

@@ -1,4 +1,4 @@
-import { Chain as c, ChainHub,DEXTYPE as d,DEXData, Dex, ChainClass } from "../primitives";
+import { Chain as c, ChainHub,DEXTYPE as d,DEXData, Dex, ChainClass, DEXTYPE } from "../primitives";
 import { Signer } from "ethers";
 import { HardhatLocalNetwork as hdhn,polygon } from "../Chains";
 import { uniswapV2Like } from "../mainDex/mainDex";
@@ -6,7 +6,7 @@ import { uniswapV2Like } from "../mainDex/mainDex";
 
 function returnSpawnDexWithFilterAndChainClass(supportedDex:d[],chainClass:ChainClass){
     function spawnDex(data:DEXData,signer:Signer):Dex{
-        if(!(data.type in supportedDex)){
+        if(!(supportedDex.includes(data.type))){
             throw new Error("This dex is not supported on this chain");
         }
         switch (data.type){

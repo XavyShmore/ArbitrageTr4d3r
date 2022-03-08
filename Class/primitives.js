@@ -67,22 +67,13 @@ class Dex {
         this.lastTSX = data.lastTSX;
     }
     getPriceUpdate() {
-        let generatePriceUpdate = (hasChangedSinceLastUpdate) => {
-            return {
-                dexAddress: this.address,
-                token0Address: this.token0,
-                token1Address: this.token1,
-                t1InstantPrice: this.t1InstantPrice(),
-                t0InstantPrice: this.t0InstantPrice(),
-                hasChangedSinceLastUpdate: hasChangedSinceLastUpdate
-            };
+        return {
+            dexAddress: this.address,
+            token0Address: this.token0,
+            token1Address: this.token1,
+            t1InstantPrice: this.t1InstantPrice(),
+            t0InstantPrice: this.t0InstantPrice()
         };
-        if (this._lastT0InstantPrice == this.t0InstantPrice()) {
-            return generatePriceUpdate(false);
-        }
-        else {
-            return generatePriceUpdate(true);
-        }
     }
 }
 exports.Dex = Dex;

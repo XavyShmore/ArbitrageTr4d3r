@@ -42,8 +42,8 @@ export class uniswapV2Like extends Dex{
         this._lastT0InstantPrice = this.t0InstantPrice();
         
         await _update();
-        
-        return this.getPriceUpdate()
+
+        return this.getPriceUpdate();
     }
 
     //Need better implementation to be safe Ex: a way to stop it
@@ -68,12 +68,12 @@ export class uniswapV2Like extends Dex{
         });
     }*/
 
-    //(token0Amount/token1Amount)/0.97
+    //(token0Amount/token1Amount)/0.97 * 2 ^ 112
     t1InstantPrice(){
-        return ethers.BigNumber.from(this.token0Amount).div(this.token1Amount).mul(100).div(97);
+        return ethers.BigNumber.from(this.token0Amount).mul(2n**112n).div(this.token1Amount).mul(100).div(97);
     }
-    //(token1Amount/token0Amount)/0.97
+    //(token1Amount/token0Amount)/0.97 * 2 ^ 112
     t0InstantPrice(){
-        return ethers.BigNumber.from(this.token1Amount).div(this.token0Amount).mul(100).div(97);
+        return ethers.BigNumber.from(this.token1Amount).mul(2n**112n).div(this.token0Amount).mul(100).div(97);
     }
 }
