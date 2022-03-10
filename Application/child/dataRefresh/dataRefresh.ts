@@ -9,7 +9,6 @@ async function start(chain:ChainClass, dex:{[addresses:string]:DEXData},updateLi
     //Initialise the provider
     var activeChain = chain;
 
-
     //Fill active Dex
     for(var [address, dexEntrie] of Object.entries(dex)){
         var exchange:Dex = getChain(activeChain.chain).spawnDex(dexEntrie,activeChain.signer);
@@ -31,16 +30,12 @@ async function start(chain:ChainClass, dex:{[addresses:string]:DEXData},updateLi
         updateListener(activeChain.provider.blockNumber, updateArray);
     }
 
-
     let topic0 = [ethers.utils.id("Swap(address,uint256,uint256,uint256,uint256,address)"),ethers.utils.id("Mint(address,uint256, uint256)"),ethers.utils.id("Burn(address,uint256, uint256)")];
-
 
     //Start update on every new block
     activeChain.provider.on("block",async (blockHeight)=>{
 
-        
         let filter:ethers.providers.Filter ={
-            
             topics:[
                 topic0
             ],
