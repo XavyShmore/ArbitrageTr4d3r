@@ -1,7 +1,7 @@
 import dataRefresh from "./dataRefresh";
 import testUtils from "../../../utils/testUtils";
 import { HardhatLocalNetwork } from "../../../Class/Chains";
-import { BigNumber, Contract, ethers } from "ethers";
+import { BigNumber, Contract } from "ethers";
 import { DEXData, priceUpdate } from "../../../Class/primitives";
 import { expect } from "chai";
 
