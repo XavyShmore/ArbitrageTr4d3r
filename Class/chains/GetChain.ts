@@ -1,6 +1,6 @@
 import { Chain as c, ChainHub,DEXTYPE as d,DEXData, Dex, ChainClass, DEXTYPE } from "../primitives";
 import { Signer } from "ethers";
-import { HardhatLocalNetwork as hdhn,polygon } from "../Chains";
+import * as cc from "../Chains";
 import { uniswapV2Like } from "../mainDex/mainDex";
 
 
@@ -34,11 +34,15 @@ export default function getChain (chain:c):ChainHub {
         }case c.rinkeby:{
             throw "chain not implemented";
         }case c.polygon:{
-            return returnSpawnDexWithFilterAndChainClass([d.SushiV2],polygon);
+            return returnSpawnDexWithFilterAndChainClass([d.SushiV2],cc.polygon);
         }case c.polygonTest:{
             throw "chain not implemented";
         }case c.hardhat:{
-            return returnSpawnDexWithFilterAndChainClass([d.SushiV2,d.UniswapV2],hdhn);
+            return returnSpawnDexWithFilterAndChainClass([d.SushiV2,d.UniswapV2],cc.HardhatLocalNetwork);
+        }case c.bsc:{
+            return returnSpawnDexWithFilterAndChainClass([d.pankakeSwapV2],cc.bsc);
+        }case c.bscTest:{
+            throw "chain not implementedf";
         }
     }
 }

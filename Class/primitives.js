@@ -23,6 +23,8 @@ var Chain;
     Chain[Chain["polygon"] = 137] = "polygon";
     Chain[Chain["polygonTest"] = 80001] = "polygonTest";
     Chain[Chain["hardhat"] = 31337] = "hardhat";
+    Chain[Chain["bsc"] = 56] = "bsc";
+    Chain[Chain["bscTest"] = 97] = "bscTest";
 })(Chain = exports.Chain || (exports.Chain = {}));
 function emptyTokenMetaData(adddress, chain = Chain.mainnet) {
     var a = {
@@ -51,6 +53,7 @@ var DEXTYPE;
 (function (DEXTYPE) {
     DEXTYPE["UniswapV2"] = "UNI-V2";
     DEXTYPE["SushiV2"] = "Sushi-V2";
+    DEXTYPE["pankakeSwapV2"] = "PankakeSwap-V2";
 })(DEXTYPE = exports.DEXTYPE || (exports.DEXTYPE = {}));
 class Dex {
     constructor(data, Signer) {

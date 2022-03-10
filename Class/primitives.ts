@@ -10,6 +10,8 @@ export enum Chain{
     polygon = 137,
     polygonTest = 80001, 
     hardhat = 31337,
+    bsc = 56,
+    bscTest = 97
 }
 
 export type TokenMetaData = {
@@ -58,7 +60,8 @@ export class Token{
 
 export enum DEXTYPE{
     UniswapV2 = "UNI-V2",
-    SushiV2 = "Sushi-V2"
+    SushiV2 = "Sushi-V2",
+    pankakeSwapV2 = "PankakeSwap-V2"
 }
 
 export type DEXData={
