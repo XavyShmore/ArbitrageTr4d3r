@@ -65,6 +65,7 @@ export enum DEXTYPE{
 }
 
 export type DEXData={
+
     address:string;
 
     chain:Chain;
@@ -201,8 +202,7 @@ export class ChainClass implements ChainData{
         this.#wallet = wallet
 
         if (this.#wallet){
-            this.#wallet.connect(this.provider);
-            this.signer = this.#wallet;
+            this.signer = this.#wallet.connect(this.provider);
         }else{
             this.signer = this.provider.getSigner();
         }

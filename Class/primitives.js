@@ -87,8 +87,7 @@ class ChainClass {
         this.provider = new StaticJsonRpcBatchProvider(this.providerAddress);
         __classPrivateFieldSet(this, _ChainClass_wallet, wallet, "f");
         if (__classPrivateFieldGet(this, _ChainClass_wallet, "f")) {
-            __classPrivateFieldGet(this, _ChainClass_wallet, "f").connect(this.provider);
-            this.signer = __classPrivateFieldGet(this, _ChainClass_wallet, "f");
+            this.signer = __classPrivateFieldGet(this, _ChainClass_wallet, "f").connect(this.provider);
         }
         else {
             this.signer = this.provider.getSigner();
