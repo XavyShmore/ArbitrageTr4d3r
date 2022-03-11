@@ -8,7 +8,7 @@ export var goerli = new ChainClass("wss://speedy-nodes-nyc.moralis.io/308f12c158
 export var polygon = new ChainClass("wss://speedy-nodes-nyc.moralis.io/308f12c1587841bd314d6066/polygon/mainnet/ws",Chain.polygon, testWallet);
 export var polygonTest = new ChainClass("wss://speedy-nodes-nyc.moralis.io/308f12c1587841bd314d6066/polygon/mumbai/ws",Chain.polygonTest,testWallet); // Mumbai
 
-export var bsc = new ChainClass("https://bsc-dataseed.binance.org/",Chain.bsc,testWallet);
+export var bsc = new ChainClass("https://speedy-nodes-nyc.moralis.io/308f12c1587841bd314d6066/bsc/mainnet",Chain.bsc,testWallet);
 //export var bscTest = new ChainClass("",Chain.bscTest,testWallet);
 
 export var HardhatLocalNetwork = new ChainClass("http://127.0.0.1:8545/",Chain.hardhat);
