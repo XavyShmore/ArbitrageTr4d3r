@@ -34,6 +34,9 @@ function returnSpawnDexWithFilterAndChainClass(supportedDex, chainClass) {
             case primitives_1.DEXTYPE.UniswapV2: {
                 return new mainDex_1.uniswapV2Like(data, signer);
             }
+            case primitives_1.DEXTYPE.pankakeSwapV2: {
+                return new mainDex_1.uniswapV2Like(data, signer);
+            }
             default: {
                 throw "Dex not implemented";
             }

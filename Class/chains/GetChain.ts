@@ -14,6 +14,8 @@ function returnSpawnDexWithFilterAndChainClass(supportedDex:d[],chainClass:Chain
                 return new uniswapV2Like(data,signer);
             }case d.UniswapV2:{
                 return new uniswapV2Like(data,signer);
+            }case d.pankakeSwapV2:{
+                return new uniswapV2Like(data,signer);
             }
             default:{
                 throw"Dex not implemented";
