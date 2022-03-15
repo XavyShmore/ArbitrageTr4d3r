@@ -48,7 +48,7 @@ async function start(chain:ChainClass, dex:{[addresses:string]:DEXData},updateLi
         let changedDex:string[] = [];
         logs.forEach((log)=>{
             let address = log.address.toLocaleLowerCase();
-            if(Object.keys(activeDex).includes(address)){
+            if(Object.keys(activeDex).includes(address) && !changedDex.includes(address)){
                 changedDex.push(address);
             }
         });

@@ -41,7 +41,7 @@ async function start(chain, dex, updateListener) {
         let changedDex = [];
         logs.forEach((log) => {
             let address = log.address.toLocaleLowerCase();
-            if (Object.keys(activeDex).includes(address)) {
+            if (Object.keys(activeDex).includes(address) && !changedDex.includes(address)) {
                 changedDex.push(address);
             }
         });
